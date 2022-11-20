@@ -1,4 +1,4 @@
-# LEDd-timedate
+# LCDd-timedate
 A python script to show the time, date, and weather on an LCD display using LCDd.
 
 ## Setup
