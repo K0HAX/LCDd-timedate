@@ -55,7 +55,7 @@ async def run_time_timer(widget):
         await asyncio.sleep(0.1)
 
 def main():
-    lcd = Server("10.5.35.187", debug=False)
+    lcd = Server("127.0.0.1", debug=False)
     lcd.start_session()
 
     screen1 = lcd.add_screen("Screen1")
