@@ -35,16 +35,19 @@ async def get_observation(stationID, roundPlaces = 0):
         if unit == "wmoUnit:degC":
             thisTemp = ((tempDict.get('value')*1.8)+32)
 
-    return round(thisTemp, roundPlaces)
+    if roundPlaces == 0:
+        return int(round(thisTemp, roundPlaces))
+    else:
+        return round(thisTemp, roundPlaces)
 
 async def get_time():
-    curTime = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    curTime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return curTime
 
 async def run_obs_timer(widget, stationID, roundPlaces = 0):
     while True:
         thisObservation = await get_observation(stationID, roundPlaces)
-        widget.set_text(f"{thisObservation} degrees")
+        widget.set_text(f"Temperature: {thisObservation} F")
         print(f"{thisObservation} degrees")
         await asyncio.sleep(3600)
 
