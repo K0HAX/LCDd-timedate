@@ -7,7 +7,7 @@ from noaa_sdk import NOAA
 
 from lcdproc.server import Server, Screen
 
-async def get_observation(stationID):
+async def get_observation(stationID, roundPlaces = 0):
     n = NOAA()
     startTime = (datetime.datetime.now() - datetime.timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M:%SZ")
     endTime = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -35,15 +35,15 @@ async def get_observation(stationID):
         if unit == "wmoUnit:degC":
             thisTemp = ((tempDict.get('value')*1.8)+32)
 
-    return round(thisTemp, 1)
+    return round(thisTemp, roundPlaces)
 
 async def get_time():
     curTime = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     return curTime
 
-async def run_obs_timer(widget, stationID):
+async def run_obs_timer(widget, stationID, roundPlaces = 0):
     while True:
-        thisObservation = await get_observation(stationID)
+        thisObservation = await get_observation(stationID, roundPlaces)
         widget.set_text(f"{thisObservation} degrees")
         print(f"{thisObservation} degrees")
         await asyncio.sleep(3600)
