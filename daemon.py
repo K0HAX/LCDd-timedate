@@ -3,37 +3,28 @@ import time
 import datetime
 import json
 import asyncio
-from noaa_sdk import NOAA
+from meNOAA import NOAA
 
 from lcdproc.server import Server, Screen
 
 async def get_observation(stationID, roundPlaces = 0):
-    n = NOAA()
+    n = NOAA(station_id=stationID)
     startTime = (datetime.datetime.now() - datetime.timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M:%SZ")
     endTime = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    retval = n.stations_observations(station_id=stationID, start=startTime, end=endTime)
+    retval = n.latest_observation()
     #Fahrenheit=(Celsius∗1.8)+32
     #"unitCode": "wmoUnit:degC"
-    valTry = 0
-    valWorked = False
     thisTemp = None
-    while valWorked == False:
-        tempDict = retval[valTry].get('properties').get('temperature')
-        #print(json.dumps(retval[valTry], indent=2))
-        if tempDict == None:
-            return None
-        if tempDict.get('unitCode') == None:
-            return None
-        unit = tempDict.get('unitCode')
+    tempDict = retval.get('properties').get('temperature')
+    if tempDict == None:
+        return None
+    if tempDict.get('unitCode') == None:
+        return None
+    unit = tempDict.get('unitCode')
 
-        thisTemp = tempDict.get('value')
-        if thisTemp == None:
-            valTry += 1
-            continue
-        if thisTemp != None:
-            valWorked = True
-        if unit == "wmoUnit:degC":
-            thisTemp = ((tempDict.get('value')*1.8)+32)
+    thisTemp = tempDict.get('value')
+    if unit == "wmoUnit:degC":
+        thisTemp = ((tempDict.get('value')*1.8)+32)
 
     if roundPlaces == 0:
         return int(round(thisTemp, roundPlaces))

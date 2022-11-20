@@ -1,3 +1,2 @@
-noaa-sdk
 git+https://github.com/K0HAX/Python-lcdproc.git@0115199ad2ef1bd9bde9d25969f57991c646baf5#egg=lcdproc
 
