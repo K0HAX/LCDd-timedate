@@ -45,8 +45,8 @@ class manager:
 
     def handler(self, signum, frame):
         print("Cleaning up!")
-        os.unlink("fifoOne")
-        os.unlink("fifoTwo")
+        os.unlink("1.fifo")
+        os.unlink("2.fifo")
         print("Exiting now!")
         self.loop.stop()
 
